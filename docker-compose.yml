@@ -1,0 +1,12 @@
+---
+version: '3'
+services:
+  smartmon:
+    #build: ./
+    image: registry.sh.synyi.com/node-exporter-smartmon:v1.0
+    restart: unless-stopped
+    privileged: true
+    volumes:
+      - /dev:/dev
+      - /var/lib/node_exporter:/var/lib/node_exporter
+

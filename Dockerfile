@@ -1,21 +1,16 @@
-FROM debian:buster-slim
+FROM alpine:3.14.0
 
-LABEL maintainer="Alexander Trost <galexrt@googlemail.com>"
+LABEL maintianer="Peng Wenming <ffxgamer@163.com>"
 
-RUN apt-get -q update && \
-    apt-get install -y --no-install-recommends smartmontools nvme-cli jq moreutils git ca-certificates && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* && \
-    mkdir -p /scripts && \
-    git clone --depth 1 --branch master --single-branch \
-        https://github.com/prometheus-community/node-exporter-textfile-collector-scripts.git \
-        /scripts && \
-    chmod 755 /scripts/*
+
     
+COPY smartmon.sh /scripts/smartmon.sh
 COPY entrypoint.sh /entrypoint.sh
 
-RUN chmod 755 /entrypoint.sh
+RUN  apk add --no-cache smartmontools bash && \
+     mkdir -p /scripts && \
+     chmod 755 /entrypoint.sh /scripts/smartmon.sh
 
 VOLUME ["/var/lib/node_exporter"]
 
-ENTRYPOINT ["/entrypoint.sh"]
+CMD ["/entrypoint.sh"]

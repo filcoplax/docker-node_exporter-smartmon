@@ -26,7 +26,7 @@ spec:
           operator: "Exists"
       terminationGracePeriodSeconds: 5
       containers:
-      - image: quay.io/galexrt/node-exporter-smartmon:v20201022-124227-096
+      - image: registry.sh.synyi.com/node-exporter-smartmon:v1.0
         name: smartmon
         env:
         - name: INTERVAL
