@@ -87,6 +87,7 @@ parse_smartctl_scsi_attributes() {
   while read -r line; do
     attr_type="$(echo "${line}" | tr '=' ':' | cut -f1 -d: | sed 's/^ \+//g' | tr ' ' '_')"
     attr_value="$(echo "${line}" | tr '=' ':' | cut -f2 -d: | sed 's/^ \+//g')"
+    hours_value="$(echo "${attr_value}" | sed 's/\,//g')"
     case "${attr_type}" in
     number_of_hours_powered_up_) power_on="$(echo "${attr_value}" | awk '{ printf "%e\n", $1 }')" ;;
     Current_Drive_Temperature) temp_cel="$(echo "${attr_value}" | cut -f1 -d' ' | awk '{ printf "%e\n", $1 }')" ;;
@@ -95,7 +96,7 @@ parse_smartctl_scsi_attributes() {
     Accumulated_start-stop_cycles) power_cycle="$(echo "${attr_value}" | awk '{ printf "%e\n", $1 }')" ;;
     Elements_in_grown_defect_list) grown_defects="$(echo "${attr_value}" | awk '{ printf "%e\n", $1 }')" ;;
     # for nvme (new)
-    Power_On_Hours) power_on="$(echo "${attr_value}" | awk '{ printf "%e\n", $1 }')" ;;
+    Power_On_Hours) power_on="$(echo "${hours_value}" | awk '{ printf "%e\n", $1 }')" ;;
     Temperature) temp_cel="$(echo "${attr_value}" | cut -f1 -d' ' | awk '{ printf "%e\n", $1 }')" ;;
     Power_Cycles) power_cycle="$(echo "${attr_value}" | awk '{ printf "%e\n", $1 }')" ;;
     esac
